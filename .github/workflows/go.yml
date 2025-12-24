@@ -12,6 +12,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: DEV
     steps:
       - uses: actions/checkout@v4
 
@@ -32,9 +33,9 @@ jobs:
         run: go build -v ./...
 
       - name: Callback on Success
-        if: success() && secrets.CALLBACK_URL != ''
+        if: success()
         env:
-          CALLBACK_URL: ${{ secrets.CALLBACK_URL }}
+          CALLBACK_URL: ${{ vars.CALLBACK_URL }}
         run: |
           HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
             -H "Content-Type: text/plain" \
@@ -46,9 +47,9 @@ jobs:
           fi
 
       - name: Callback on Failure
-        if: failure() && secrets.CALLBACK_URL != ''
+        if: failure()
         env:
-          CALLBACK_URL: ${{ secrets.CALLBACK_URL }}
+          CALLBACK_URL: ${{ vars.CALLBACK_URL }}
         run: |
           HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
             -H "Content-Type: text/plain" \
