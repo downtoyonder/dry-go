@@ -30,3 +30,31 @@ jobs:
 
       - name: Build
         run: go build -v ./...
+
+      - name: Callback on Success
+        if: success() && secrets.CALLBACK_URL != ''
+        env:
+          CALLBACK_URL: ${{ secrets.CALLBACK_URL }}
+        run: |
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+            -H "Content-Type: text/plain" \
+            -d "go build successfully" \
+            "${CALLBACK_URL}")
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "Callback failed with HTTP status code: $HTTP_CODE"
+            exit 1
+          fi
+
+      - name: Callback on Failure
+        if: failure() && secrets.CALLBACK_URL != ''
+        env:
+          CALLBACK_URL: ${{ secrets.CALLBACK_URL }}
+        run: |
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+            -H "Content-Type: text/plain" \
+            -d "go build failed" \
+            "${CALLBACK_URL}")
+          if [ "$HTTP_CODE" != "200" ]; then
+            echo "Callback failed with HTTP status code: $HTTP_CODE"
+            exit 1
+          fi
