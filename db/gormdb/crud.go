@@ -24,20 +24,14 @@ type (
 )
 
 type QueryOpt struct {
-	OmitNotFoundErr   bool
 	OmitNotFoundErrFn func(err error) error
-
-	// Pagination options
-	Paginate   bool
-	PageNumber int
-	PageSize   int
-	TotalCount int64 // Will be populated after query execution
-
-	// Sorting options
-	OrderBy []string // Format: "column_name asc" or "column_name desc"
-
-	// Preload options
-	Preloads []string // Relations to preload
+	OrderBy           []string
+	Preloads          []string
+	TotalCount        int64
+	PageNumber        int
+	PageSize          int
+	OmitNotFoundErr   bool
+	Paginate          bool
 }
 
 func NewQueryOpt() *QueryOpt {
@@ -122,9 +116,9 @@ type CRUD[T any] interface {
 	// Create supports create one or multiple records
 	// 创建完成后 ID，CreatedAt，UpdatedAt 会回填到 entities 中
 	Create(ctx context.Context, entities ...*T) error
-	// Get retrive one record matches the conditions.
+	// Get retrieve one record matches the conditions.
 	Get(ctx context.Context, query *Query, opts ...QueryOptFn) (*T, error)
-	// List retrive all records matches the conditions.
+	// List retrieve all records matches the conditions.
 	List(ctx context.Context, query *Query, opts ...QueryOptFn) (*ListRes[T], error)
 	// Update set one or more records match the conditions according to updateParam
 	Update(ctx context.Context, query *Query, uParam map[string]any) error

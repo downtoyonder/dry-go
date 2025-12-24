@@ -13,7 +13,9 @@ func LoadViperConfigs(paths ...string) *viper.Viper {
 		if err := pathConf.ReadInConfig(); err != nil {
 			panic(err)
 		}
-		conf.MergeConfigMap(pathConf.AllSettings())
+		if err := conf.MergeConfigMap(pathConf.AllSettings()); err != nil {
+			panic(err)
+		}
 	}
 
 	return conf

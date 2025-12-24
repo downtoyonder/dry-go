@@ -6,8 +6,8 @@ import (
 )
 
 type User struct {
-	ID   int
 	Name string
+	ID   int
 	Age  int
 }
 
@@ -186,14 +186,14 @@ func ExampleSetCmp() {
 	current := []int{1, 2, 3, 4}
 	target := []int{3, 4, 5, 6}
 
-	new, overlapped, deleted := SetCmp(current, target)
+	added, overlapped, deleted := SetCmp(current, target)
 
 	// Sort for consistent output
-	sort.Ints(new)
+	sort.Ints(added)
 	sort.Ints(overlapped)
 	sort.Ints(deleted)
 
-	fmt.Println("New:", new)
+	fmt.Println("New:", added)
 	fmt.Println("Overlapped:", overlapped)
 	fmt.Println("Deleted:", deleted)
 	// Output:
@@ -207,14 +207,14 @@ func ExampleSetCmp_strings() {
 	current := []string{"apple", "banana", "cherry"}
 	target := []string{"banana", "cherry", "date"}
 
-	new, overlapped, deleted := SetCmp(current, target)
+	added, overlapped, deleted := SetCmp(current, target)
 
 	// Sort for consistent output
-	sort.Strings(new)
+	sort.Strings(added)
 	sort.Strings(overlapped)
 	sort.Strings(deleted)
 
-	fmt.Println("New:", new)
+	fmt.Println("New:", added)
 	fmt.Println("Overlapped:", overlapped)
 	fmt.Println("Deleted:", deleted)
 	// Output:

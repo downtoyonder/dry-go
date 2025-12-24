@@ -82,15 +82,15 @@ func FieldMapFieldFn[KeyT comparable, ValueT, StructT any](slice []StructT, keyS
 //	// new: [4]
 //	// overlapped: [2 3]
 //	// deleted: [1]
-func SetCmp[E comparable](current, target []E) ([]E, []E, []E) {
+func SetCmp[E comparable](current, target []E) (added, overlapped, deleted []E) {
 	currentSet := mapset.NewSet(current...)
 	targetSet := mapset.NewSet(target...)
 
-	new := targetSet.Difference(currentSet).ToSlice()
-	deleted := currentSet.Difference(targetSet).ToSlice()
-	overlapped := currentSet.Intersect(targetSet).ToSlice()
+	added = targetSet.Difference(currentSet).ToSlice()
+	deleted = currentSet.Difference(targetSet).ToSlice()
+	overlapped = currentSet.Intersect(targetSet).ToSlice()
 
-	return new, overlapped, deleted
+	return added, overlapped, deleted
 }
 
 // Uniq returns a slice containing only the unique elements from the input slice 'list'.
